@@ -1,3 +1,8 @@
+---
+title: "GlassLine — Privacy Policy"
+description: "How the GlassLine teleprompter app for Android handles your data."
+---
+
 # GlassLine — Privacy Policy
 
 **Application:** GlassLine
