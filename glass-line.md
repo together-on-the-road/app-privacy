@@ -32,8 +32,9 @@ This policy explains what the app does with data, and what it does not.
   switched on for every installation from the start, and they use an advertising
   identifier.
 - We collect usage and crash statistics. They never contain your scripts or your voice,
-  but they are not anonymous, and Google may use the usage part for advertising as well
-  as for our statistics.
+  and they are not tied to your advertising identifier — but they are not anonymous
+  either, and Google may use the usage part for advertising as well as for our
+  statistics.
 
 ## Scripts you write
 
@@ -151,12 +152,14 @@ advertising consent, loads no ad and makes no request to any advertising exchang
 when it is switched on, the consent form described above is the first thing that
 happens, before any ad is requested and before the app ever offers you a video.
 
-Two things happen regardless, and it would be wrong to imply otherwise. Parts of the ad
+One thing happens regardless, and it would be wrong to imply otherwise: parts of the ad
 libraries are started by Android when the app's process starts, before any of the above
-is decided. And the analytics described in the next section run from launch on every
-installation and read your advertising identifier — so if you want that identifier out
-of use entirely, resetting or deleting it in Android's settings is the control that
-covers both.
+is decided. They request nothing until advertising is switched on for your device.
+
+The analytics described in the next section do run from launch on every installation,
+but they are configured **not** to read your advertising identifier, so that identifier
+is used only for the advertising described here — and only once advertising is switched
+on and, where consent is required, you have given it.
 
 ## Analytics and crash reporting
 
@@ -166,9 +169,10 @@ GlassLine uses **Google Firebase** for:
   prompt was shown). These events describe actions, not content: **the text of your
   scripts is never included, and neither is anything you have said or anything the
   speech recogniser returned.** They carry counts, durations, settings and outcomes.
-  They are not anonymous: Firebase attaches an app-instance identifier and, by default,
-  your advertising identifier, and Google may use this data for advertising and
-  measurement as well as for our own statistics.
+  They are not anonymous: Firebase attaches an app-instance identifier, and Google may
+  use this data for measurement and advertising as well as for our own statistics. **We
+  have switched off the analytics' use of your advertising identifier**, so the usage
+  statistics are not tied to it.
 - **Crashlytics** — crash and error reports, including the device model, OS version, app
   version and a stack trace, so that failures can be diagnosed and fixed.
 - **Remote Config** — settings the app downloads from Google's Firebase servers to
@@ -213,7 +217,7 @@ ones that mean anything for your privacy.
 | `RECORD_AUDIO` | Voice-controlled scrolling. Requested on first Play, used only during a reading session. |
 | `INTERNET`, `ACCESS_NETWORK_STATE` | Speech recognition — your device's recognition service may recognise over the network — and loading ads, analytics, crash reports and remote settings. |
 | Accessibility service (`BIND_ACCESSIBILITY_SERVICE`) | Optional. Lets voice control keep working while another app records video. Off unless you enable it in Android's settings. |
-| `com.google.android.gms.permission.AD_ID` | Merged in by the Appodeal SDK, and used by Firebase Analytics as well as by the ad SDKs; gives access to the advertising identifier. |
+| `com.google.android.gms.permission.AD_ID` | Merged in by the Appodeal SDK; gives access to the advertising identifier, which is used for the advertising described above. The analytics are configured not to use it. |
 | `ACCESS_ADSERVICES_AD_ID`, `ACCESS_ADSERVICES_ATTRIBUTION`, `ACCESS_ADSERVICES_TOPICS` | Merged in by the Google Mobile Ads SDK for Android's Privacy Sandbox. |
 | `com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE` | Merged in by Firebase Analytics. Lets Google tell us which Play Store link an install came from, and when it was clicked. |
 | `ACCESS_WIFI_STATE` | Merged in by the ad consent library, as a network-quality signal on ad and consent requests. |
