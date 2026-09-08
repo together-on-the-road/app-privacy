@@ -130,6 +130,15 @@ Advertisers bidding through these exchanges may also receive this information in
 to bid. In the European Economic Area, the United Kingdom and Switzerland, which of them
 receive it depends on the choices you make in the consent form described below.
 
+The same information is also used to keep the advertising itself honest. These partners
+check the advertising identifier and the ad events against invalid traffic, click fraud
+and abuse, and keep what their own legal and contractual obligations oblige them to keep.
+That is the **fraud prevention, security and compliance** purpose recorded beside
+*advertising or marketing* for **device or other IDs** on this app's Google Play Data
+safety listing. It uses the data already listed above and collects nothing further, and
+GlassLine performs no checks of its own: it has no accounts, no server and nothing to
+defend.
+
 These partners act as independent controllers of that data. See:
 
 - [Google AdMob / Google advertising privacy](https://policies.google.com/technologies/ads)
