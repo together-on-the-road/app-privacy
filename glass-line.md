@@ -107,8 +107,10 @@ choose to watch. There are no banners and no interstitials. From time to time th
 asks whether you would like to watch one; the video plays only if you choose to watch
 it.
 
-Ads are delivered through the **Appodeal** mediation SDK, which in this app serves ads
-from **Google AdMob** only. To select and measure ads, these SDKs may process:
+Ads are delivered through the **Appodeal** mediation SDK. In this app it serves ads from
+**Google AdMob** and from Appodeal's own demand — the **BidMachine** ad exchange and the
+**Bidon** bidding layer. No other advertising network's software is included in the app.
+To select and measure ads, these SDKs may process:
 
 - your device's advertising identifier (Android Advertising ID);
 - coarse device and app information (device model, OS version, app version, language,
@@ -116,16 +118,32 @@ from **Google AdMob** only. To select and measure ads, these SDKs may process:
 - your IP address, from which an approximate location is derived;
 - ad events — that an ad was requested, shown, clicked or completed.
 
+Advertisers bidding through these exchanges may also receive this information in order
+to bid. In the European Economic Area, the United Kingdom and Switzerland, which of them
+receive it depends on the choices you make in the consent form described below.
+
 These partners act as independent controllers of that data. See:
 
 - [Google AdMob / Google advertising privacy](https://policies.google.com/technologies/ads)
 - [Appodeal privacy policy](https://www.appodeal.com/privacy-policy/)
+- [BidMachine privacy policy](https://www.bidmachine.com/privacy-policy)
+- [Bidon privacy policy](https://www.bidon.org/privacy-policy)
 
 **Your choices.** In the European Economic Area, the United Kingdom and Switzerland, the
 app asks for your consent before any personalised advertising, using Google's consent
-form. In US states with applicable privacy laws, the app offers the opt-out required by
-those laws. On any Android device you can also reset or delete your advertising ID in
-**Settings → Privacy → Ads**, which limits the ad personalisation described above.
+form. It is shown before the app makes its first advertising request, and it lists the
+partners it is asking about; you can change your answer later through the **Ad privacy**
+button in the app's top bar. In US states with applicable privacy laws, that same button
+is the opt-out those laws require. On any Android device you can also reset or delete
+your advertising ID in **Settings → Privacy → Ads**, which limits the ad personalisation
+described above.
+
+Advertising is not switched on for every installation from the beginning, and it can be
+switched off remotely. Until it is switched on for your device, GlassLine starts no
+advertising software, requests no advertising consent, reads no advertising identifier
+and makes no advertising request. When it is switched on, the consent form described
+above is the first thing that happens — before any ad is requested, and before the app
+ever offers you a video.
 
 ## Analytics and crash reporting
 
@@ -166,6 +184,8 @@ through the app, contact us at the address above and we will act on it.
 | `INTERNET`, `ACCESS_NETWORK_STATE` | Speech recognition — your device's recognition service may recognise over the network — and loading ads, analytics, crash reports and remote settings. |
 | Accessibility service (`BIND_ACCESSIBILITY_SERVICE`) | Optional. Lets voice control keep working while another app records video. Off unless you enable it in Android's settings. |
 | `com.google.android.gms.permission.AD_ID` | Merged in by the Google Mobile Ads SDK; gives access to the advertising identifier used for ads. |
+| `ACCESS_ADSERVICES_AD_ID`, `ACCESS_ADSERVICES_ATTRIBUTION`, `ACCESS_ADSERVICES_TOPICS` | Merged in by the Google Mobile Ads SDK for Android's Privacy Sandbox. |
+| `com.amazon.privacypass.ATTEST` | Merged in by the ad measurement library that ships with BidMachine. It is used for advert-verification attestation on Amazon devices and does nothing on other phones. |
 
 ## Your rights
 
