@@ -28,8 +28,12 @@ This policy explains what the app does with data, and what it does not.
 - There is an optional accessibility service that keeps voice scrolling working while
   another app is recording video. It is off unless you turn it on yourself, and
   everything else works without it.
-- The app shows rewarded video ads, and those ads use an advertising identifier.
-- We collect anonymous usage and crash statistics so we can fix what breaks.
+- The app is supported by rewarded video ads — videos you choose to watch. They are not
+  switched on for every installation from the start, and they use an advertising
+  identifier.
+- We collect usage and crash statistics. They never contain your scripts or your voice,
+  but they are not anonymous, and Google may use the usage part for advertising as well
+  as for our statistics.
 
 ## Scripts you write
 
@@ -52,7 +56,8 @@ Voice-controlled scrolling is the point of the app, so GlassLine needs to hear y
 - The app asks for microphone permission the first time you press Play — never at
   launch — and will not listen until you grant it.
 - Audio is captured only while a reading session is running — that is, between Play and
-  Pause. Stopping playback or leaving the teleprompter ends the session. If you have
+  Pause, plus a few seconds afterwards while the microphone is released. Stopping
+  playback or leaving the teleprompter ends the session. If you have
   enabled the optional accessibility service described below, a session continues while
   you are in your camera app, so that the script can keep following your voice while you
   film; it still ends when you stop playback or leave the teleprompter.
@@ -85,8 +90,9 @@ your speech can be recognised and used to scroll the script, and it shows a smal
 "GlassLine is listening" badge over whatever app you are filming with. The badge does
 not take touches; the app underneath keeps every tap. While the service is on, it also
 checks which other apps are using the microphone, so that GlassLine can tell you when a
-camera has taken it — this is read from Android's audio system, by audio source, and
-never by looking at which apps you have or what you are doing in them.
+camera has taken it — **the accessibility service** reads this from Android's audio
+system, by audio source, and never by looking at which apps you have or what you are
+doing in them.
 
 **What it does not do.** It cannot read what is on your screen. It receives no
 accessibility events, cannot tap, type or act in other apps, and has no capabilities
@@ -112,7 +118,8 @@ Ads are delivered through the **Appodeal** mediation SDK. In this app it serves 
 **Bidon** bidding layer. No other advertising network's software is included in the app.
 To select and measure ads, these SDKs may process:
 
-- your device's advertising identifier (Android Advertising ID);
+- your device's advertising identifier (Android Advertising ID), and the **App Set ID**,
+  a separate identifier that Google scopes to this developer's apps on your device;
 - coarse device and app information (device model, OS version, app version, language,
   country);
 - your IP address, from which an approximate location is derived;
@@ -133,29 +140,42 @@ These partners act as independent controllers of that data. See:
 app asks for your consent before any personalised advertising, using Google's consent
 form. It is shown before the app makes its first advertising request, and it lists the
 partners it is asking about; you can change your answer later through the **Ad privacy**
-button in the app's top bar. In US states with applicable privacy laws, that same button
-is the opt-out those laws require. On any Android device you can also reset or delete
-your advertising ID in **Settings → Privacy → Ads**, which limits the ad personalisation
-described above.
+button in the app bar of GlassLine's first screen. In US states with applicable privacy
+laws, that same button is the opt-out those laws require. On any Android device you can
+also reset or delete your advertising ID in **Settings → Privacy → Ads**, which limits
+the ad personalisation described above.
 
 Advertising is not switched on for every installation from the beginning, and it can be
-switched off remotely. Until it is switched on for your device, GlassLine starts no
-advertising software, requests no advertising consent, reads no advertising identifier
-and makes no advertising request. When it is switched on, the consent form described
-above is the first thing that happens — before any ad is requested, and before the app
-ever offers you a video.
+switched off remotely. Until it is switched on for your device, GlassLine **requests no
+advertising consent, loads no ad and makes no request to any advertising exchange**;
+when it is switched on, the consent form described above is the first thing that
+happens, before any ad is requested and before the app ever offers you a video.
+
+Two things happen regardless, and it would be wrong to imply otherwise. Parts of the ad
+libraries are started by Android when the app's process starts, before any of the above
+is decided. And the analytics described in the next section run from launch on every
+installation and read your advertising identifier — so if you want that identifier out
+of use entirely, resetting or deleting it in Android's settings is the control that
+covers both.
 
 ## Analytics and crash reporting
 
 GlassLine uses **Google Firebase** for:
 
-- **Analytics** — anonymous, aggregated usage events (for example: a session started, a
-  script was created, a prompt was shown). These events describe actions, not content:
-  the text of your scripts is never included, and neither is anything you have said.
+- **Analytics** — usage events (for example: a session started, a script was created, a
+  prompt was shown). These events describe actions, not content: **the text of your
+  scripts is never included, and neither is anything you have said or anything the
+  speech recogniser returned.** They carry counts, durations, settings and outcomes.
+  They are not anonymous: Firebase attaches an app-instance identifier and, by default,
+  your advertising identifier, and Google may use this data for advertising and
+  measurement as well as for our own statistics.
 - **Crashlytics** — crash and error reports, including the device model, OS version, app
   version and a stack trace, so that failures can be diagnosed and fixed.
-- **Remote Config** — settings fetched from our servers to adjust app behaviour. This is
-  a download; nothing about you is sent up.
+- **Remote Config** — settings the app downloads from Google's Firebase servers to
+  adjust its behaviour. **We have no servers of our own.** It is mostly a download, but
+  the request is not empty: it carries an app-installation identifier and basic app and
+  device details (app and SDK version, language, country, time zone, platform version).
+  It carries nothing you have written.
 
 Firebase processes this data on Google's infrastructure under the
 [Google Privacy Policy](https://policies.google.com/privacy) and the
@@ -167,8 +187,14 @@ to work normally.
 ## Data we do not collect
 
 We do not collect your name, email address, phone number, contacts, photos, files,
-precise GPS location, or the content of your scripts. We do not sell personal
-information. We do not build user profiles ourselves.
+precise GPS location, or the content of your scripts. GlassLine has no location
+permission of any kind, and it cannot see what other apps you have installed.
+
+We do not sell personal information for money. Sharing an advertising identifier with
+our advertising partners so that they can select and measure personalised ads may
+nonetheless count as a "sale" or a "share" under some US state privacy laws; the **Ad
+privacy** control described under Advertising is how you opt out of it. Beyond the
+advertising and analytics services named on this page, we build no profile of you.
 
 ## Children
 
@@ -176,16 +202,27 @@ GlassLine is not directed at children and we do not knowingly collect personal
 information from children. If you believe a child has provided personal information
 through the app, contact us at the address above and we will act on it.
 
-## Permissions the app requests
+## Permissions in the installed app
+
+Some of these GlassLine asks for; the rest are merged into the app by the libraries it
+uses, which is why they appear in the store listing. This is the complete list of the
+ones that mean anything for your privacy.
 
 | Permission | Why |
 | --- | --- |
 | `RECORD_AUDIO` | Voice-controlled scrolling. Requested on first Play, used only during a reading session. |
 | `INTERNET`, `ACCESS_NETWORK_STATE` | Speech recognition — your device's recognition service may recognise over the network — and loading ads, analytics, crash reports and remote settings. |
 | Accessibility service (`BIND_ACCESSIBILITY_SERVICE`) | Optional. Lets voice control keep working while another app records video. Off unless you enable it in Android's settings. |
-| `com.google.android.gms.permission.AD_ID` | Merged in by the Google Mobile Ads SDK; gives access to the advertising identifier used for ads. |
+| `com.google.android.gms.permission.AD_ID` | Merged in by the Appodeal SDK, and used by Firebase Analytics as well as by the ad SDKs; gives access to the advertising identifier. |
 | `ACCESS_ADSERVICES_AD_ID`, `ACCESS_ADSERVICES_ATTRIBUTION`, `ACCESS_ADSERVICES_TOPICS` | Merged in by the Google Mobile Ads SDK for Android's Privacy Sandbox. |
+| `com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE` | Merged in by Firebase Analytics. Lets Google tell us which Play Store link an install came from, and when it was clicked. |
+| `ACCESS_WIFI_STATE` | Merged in by the ad consent library, as a network-quality signal on ad and consent requests. |
 | `com.amazon.privacypass.ATTEST` | Merged in by the ad measurement library that ships with BidMachine. It is used for advert-verification attestation on Amazon devices and does nothing on other phones. |
+
+The app also contains a component from the Appodeal SDK that is told by Android when a
+new app is installed on your device, so that an install resulting from an ad can be
+counted. GlassLine has no permission to list the apps you have installed and does not
+do so.
 
 ## Your rights
 
@@ -193,8 +230,9 @@ Depending on where you live, you may have the right to access, correct, delete o
 export personal data about you, to object to or restrict its processing, and to withdraw
 consent. Because GlassLine holds no account and stores your content only on your
 device, most of this is exercised directly: uninstalling the app removes the data it
-keeps. For data held by our advertising and analytics partners, use the links above, or
-write to us and we will help.
+keeps — though, as above, a copy of your scripts may remain in your own Google backup
+until that backup is deleted or replaced. For data held by our advertising and analytics
+partners, use the links above, or write to us and we will help.
 
 ## Changes to this policy
 
